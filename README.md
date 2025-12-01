@@ -1,43 +1,74 @@
-# 1024
+# 🧩 1024 Game Studio
 
-* **Youtube video link for first project defense:** https://youtu.be/q9he3uMhmq4
+![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square&logo=java)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0-green?style=flat-square&logo=spring)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?style=flat-square&logo=postgresql)
+![Thymeleaf](https://img.shields.io/badge/Frontend-Thymeleaf-darkgreen?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)
 
-* **Youtube video link for second project defense:** https://youtu.be/lvDfhIhPsEE
-
-* **Youtube video link for third project defense:** https://youtu.be/R2nu60jqMoA
-
-![Architecture Diagram](Diagram.png)
-
-## Project Description
-
-1024 is an educational Java project built with Spring Boot that implements the popular tile-matching puzzle game "1024". The project showcases the development of a multi-layered application featuring a REST API, web and console user interfaces, a rating system, comments, and user management.
+> **A comprehensive full-stack implementation of the 1024 puzzle game built with Spring Boot.**
+---
 
 ## Key Features
-
-* **Game Logic**: Core mechanics for merging tiles to reach the 1024 tile.
-* **User Interfaces**:
-
-    * Web version built with HTML/CSS/JavaScript (`1024.html`).
-    * Console application (`ConsoleUI.java`) for quick testing and demonstrations.
+* **Dual Interface Support**:
+    * **Web UI**: Responsive interface built with HTML5, CSS3, JavaScript, and Thymeleaf.
+    * **Console UI**: A standalone text-based interface for logic testing and minimal resource usage.
+* **Robust Backend**: Built on Spring Boot with a strict separation of concerns (MVC pattern).
+* **REST API**: Fully exposed endpoints for managing scores, ratings, comments, and users.
+* **Data Persistence**: Integrated PostgreSQL database using Spring Data JPA and JDBC.
 * **Services**:
+    * Ratings
+    * comments
+    * scores
+    * user management
+* **User Experience**: Features include global leaderboards, commenting systems, rating logic, and theme switcher.
 
-    * Ratings (`RatingService`), comments (`CommentService`), scores (`ScoreService`), and user management (`UserService`).
-    * Implementations using JDBC, JPA, and REST clients for external interactions.
-* **Themes**: Switch between light and dark modes using `theme-switcher.js`.
-* **REST API**: Predefined requests available in `gamestudio.http` for managing `scores`, `comments`, `ratings`, and `users`.
+---
 
-## Interface Demonstrations
+## 🛠 Tech Stack
 
-![Console UI](console_ui.png)
-![Web UI](web_ui.png)
-![Web UI](web_ui2.png)
+| Layer | Technologies |
+| :--- | :--- |
+| **Backend** | Java 17, Spring Boot (Web, Data JPA, JDBC), REST API |
+| **Frontend** | Thymeleaf, HTML5, CSS3, JavaScript (ES6+) |
+| **Database** | PostgreSQL |
+| **Build & Tools** | Maven, Git, IntelliJ IDEA, Postman |
 
+---
+
+## 📸 Interface Preview
+### Web User Interface
+*Features a responsive design and theme switching capability.*
+
+|                         Gameplay                          |
+|:---------------------------------------------------------:|
+| <img src="web_ui.png" alt="Web UI Gameplay" width="100%"> |
+|  <img src="web_ui2.png" alt="Web UI Stats" width="100%">  |
+
+|                 Hall of Fame & Comments                  |
+|:--------------------------------------------------------:|
+|   <img src="hof.png" alt="Web UI Stats" width="100%">    |
+| <img src=" coments.png" alt="Web UI Stats" width="100%"> |
+
+|                         Profile                         |
+|:-------------------------------------------------------:|
+| <img src="profile.png" alt="Web UI Stats" width="100%"> |
+
+
+### Console User Interface
+*Lightweight interface for direct logic interaction.*
+
+|                       Console UI                        |
+|:-------------------------------------------------------:|
+| <img src="console_ui.png" alt="Console UI" width="500"> |
+
+---
 
 ## Architecture and Project Structure
 
 The project follows a multi-layered architecture:
 
-1. **core** — business logic and models (`Field`, `GameLogic`, `GameState`).
+1. **core** — Logic (Game mechanics, Field management). Independent of frameworks. (`Field`, `GameLogic`, `GameState`).
 2. **controller** — request handling and interaction between UI and services.
 3. **services** — interfaces and implementations for database access and external services.
 4. **entity** — JPA entities (`Score`, `Comment`, `Rating`, `User`).
@@ -66,29 +97,56 @@ The project follows a multi-layered architecture:
 └── README.md (this file)
 ```
 
+---
 
-## Configuration
+## ⚙️ Getting Started
+Follow these instructions to set up the project locally.
 
-Default properties in `application.properties`:
+### Prerequisites
+* **Java Development Kit (JDK)** (Version 17)
+* **Maven**
+* **PostgreSQL**
 
-```properties
-spring.datasource.url=Your URL
-spring.datasource.username=postgres
-spring.datasource.password=Your Password
-spring.datasource.hikari.maximumPoolSize=10
+### Installation
+1.  **Clone the repository**
 
-remote.server.api=http://localhost:8080/api
+2. **Create a PostgreSQL database and update the `src/main/resources/application.properties` file with your credentials:**
 
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=Your Mail
-spring.mail.password=Your Key
-```
-Adjust these settings as necessary.
+    ```properties
+    # Database Configuration
+    spring.datasource.url=jdbc:postgresql://localhost:5432/YOUR_DB_NAME
+    spring.datasource.username=postgres
+    spring.datasource.password=YOUR_PASSWORD
+    
+    # HikariCP Settings
+    spring.datasource.hikari.maximumPoolSize=10
+    
+    # API Configuration
+    remote.server.api=http://localhost:8080/api
+    
+    # Mail Settings (Optional - for notifications)
+    spring.mail.host=smtp.gmail.com
+    spring.mail.port=587
+    spring.mail.username=YOUR_EMAIL
+    spring.mail.password=YOUR_APP_KEY
+    ```
+3.  **Build and Run**
+    ```bash
+    mvn spring-boot:run
+    ```
+4.  **Access the Application**
+    Open your browser: [http://localhost:8080/](http://localhost:8080/)
 
+## 📺 Video Demo
+Check out the comprehensive demonstration of the final project features and gameplay:
+
+▶️ **[Watch Final Presentation on YouTube](https://youtu.be/R2nu60jqMoA)**
+
+---
+*(Development History: [Milestone 1 Defense](https://youtu.be/q9he3uMhmq4) | [Milestone 2 Defense](https://youtu.be/lvDfhIhPsEE))*
 ## Contact
 
-* **Author**: Arsenii Burlaka
-* **E-mail**: [arseniy.burlaka.2005@gmail.com](mailto:arseniy.burlaka.2005@gmail.com)
+* **Author:** Arsenii Burlaka
+* **E-mail:** [arseniy.burlaka.2005@gmail.com](mailto:arseniy.burlaka.2005@gmail.com)
 
 *Thank you for your interest in and contributions to this project!*
