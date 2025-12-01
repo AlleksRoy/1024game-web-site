@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:if="${currentMode == 'easy'}">Easy Lvl | 1024</title>
+    <title th:if="${currentMode == ''}">Normal Lvl | 1024</title>
+    <title th:if="${currentMode == 'hard'}">Hard Lvl | 1024</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="/js/game.js"></script>
+    <script src="/js/theme-switcher.js"></script>
+</head>
+<body th:attr="data-status=${@game1024Controller.isGameWon()} ? 'won' : (${ @game1024Controller.isGameLost()} ? 'lost' : 'playing'), data-mode=${currentMode}">
+<header class="site-header">
+    <h1>1024 Game</h1>
+    <hr>
+</header>
+
+<div class="dropdown" id="menuDropdown">
+    <button class="btn dropbtn" id="menuToggle">≡ Menu</button>
+    <div class="dropdown-content" id="dropdownContent">
+        <a th:href="@{/}" class="btn">🡰</a>
+        <a th:if="${currentMode != 'easy'}" th:href="@{/1024/easy}" class="btn">Easy Level</a>
+        <a th:if="${currentMode != ''}" th:href="@{/1024/normal}" class="btn">Normal Level</a>
+        <a th:if="${currentMode != 'hard'}" th:href="@{/1024/hard}" class="btn">Hard Level</a>
+        <a th:href="@{#}" class="btn" id="hofBtn">Hall of Fame</a>
+        <a th:if="${!@authenticationController.isUserLogged()}" th:href="@{/1024/reviews}" class="btn">Reviews</a>
+    </div>
+</div>
+
+<!--Theme-->
+<div id="theme-switcher" class="theme-switcher">
+    <button class="btn dropbtn"><i class="fas fa-cog"></i></button>
+    <div id="theme-menu" class="dropdown-content">
+        <a href="" data-theme="green" class="btn">Green</a>
+        <a href="" data-theme="pink" class="btn">Pink</a>
+        <a href="" data-theme="dark" class="btn">Dark</a>
+        <a href="" data-theme="light" class="btn">Light</a>
+    </div>
+</div>
+<span th:if="${@authenticationController.isUserLogged()}">
+    <div class="profile-btn">
+        <a th:href="@{/profile}" class="btn"><i class="fas fa-user"></i></a>
+    </div>
+</span>
+
+<main class="game-container page-1024">
+    <div class="board-wrapper">
+        <a th:href="@{${newGamePath}}" class="btn" th:if="${@game1024Controller.isGameRunning()}">New Game</a>
+        <div class="field-wrapper">
+            <div th:utext="${htmlField}"></div>
+            <div id="gameOverlay"></div>
+        </div>
+
+        <div class="score-container">
+            <div class="score">
+                <div class="score-label">Score:</div>
+                <div class="score-value" th:text="${gridScore}">0</div>
+            </div>
+            <div class="score"
+                 th:if="${@authenticationController.isUserLogged()}">
+                <div class="score-label">Best score:</div>
+                <div class="score-value" th:text="${bestScore}">0</div>
+            </div>
+        </div>
+
+        <div class="game-buttons" th:if="${@game1024Controller.isGameRunning()}">
+            <!--Undo-->
+            <div th:if="${currentMode == 'easy'}" class="undo-container">
+                <a th:if="${undoUsesLeft > 0}" th:href="@{/1024/undo}" class="btn undo-btn">
+                    <i class="fas fa-undo-alt"></i>
+                </a>
+                <a th:if="${undoUsesLeft == 0}" href="" class="btn undo-btn disabled">
+                    <i class="fas fa-undo-alt"></i>
+                </a>
+                <div class="undo-tooltip">
+                    <strong>UNDO</strong>
+                    <span th:text="${undoUsesLeft}"></span> uses left
+                    <br>Make a 128 tile to get more uses
+                </div>
+            </div>
+
+            <!--Swap-->
+            <div th:if="${currentMode == 'easy'}" class="swap-container">
+                <button th:if="${swapUsesLeft > 0}" id="swap-btn" class="btn swap-btn">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                <button th:if="${swapUsesLeft == 0}" class="btn swap-btn disabled">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                <div class="swap-tooltip">
+                    <strong>SWAP</strong>
+                    <span th:text="${swapUsesLeft}"></span> uses left
+                    <br>Make a 256 tile to get more uses
+                </div>
+            </div>
+            <!--Delete-->
+            <div th:if="${currentMode == 'easy'}" class="delete-container">
+                <button th:if="${deleteUsesLeft > 0}" id="delete-btn" class="btn delete-btn" title="DELETE">&times;</button>
+                <button th:if="${deleteUsesLeft == 0}" class="btn delete-btn disabled" title="DELETE">&times;</button>
+                <div class="delete-tooltip">
+                    <strong>DELETE</strong>
+                    <span th:text="${deleteUsesLeft}"></span> uses left
+                    <br/>Make a 512 tile to get more uses
+                </div>
+            </div>
+            <!--Shuffle-->
+            <div th:if="${currentMode == 'easy'}" class="shuffle-container">
+                <a th:if="${shuffleUsesLeft > 0}" th:href="@{/1024/shuffle}" class="btn shuffle-btn">
+                    <i class="fas fa-random"></i>
+                </a>
+                <a th:if="${shuffleUsesLeft == 0}" href="" class="btn shuffle-btn disabled">
+                    <i class="fas fa-random"></i>
+                </a>
+                <div class="shuffle-tooltip">
+                    <strong>SHUFFLE</strong>
+                    <span th:text="${shuffleUsesLeft}"></span> uses left
+                    <br>Make a 512 tile to get more uses
+                </div>
+            </div>
+
+        </div>
+
+        <!--Arrows-->
+        <div class="controls-direction" th:if="${@game1024Controller.isGameRunning()}">
+            <a th:href="@{/1024/up}" class="btn arrow-btn arrow-up" style="transform: rotate(-90deg);">➜</a>
+            <div class="dir-row">
+                <a th:href="@{/1024/left}" class="btn arrow-btn arrow-left" style="transform: rotate(180deg);">➜</a>
+                <a th:href="@{/1024/down}" class="btn arrow-btn arrow-down" style="transform: rotate(90deg);">➜</a>
+                <a th:href="@{/1024/right}" class="btn arrow-btn arrow-right">➜</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Hall of Fame modal -->
+<div id="hofModal" class="modal">
+    <div class="modal-content styled-modal">
+        <span class="close" id="closeModal">&times;</span>
+        <header class="site-header">
+            <h2 th:if="${currentMode == 'easy'}">Easy Lvl</h2>
+            <h2 th:if="${currentMode == ''}">Normal Lvl</h2>
+            <h2 th:if="${currentMode == 'hard'}">Hard Lvl</h2>
+            <hr>
+        </header>
+
+        <div class="podium-container">
+            <div th:each="score, stat : ${best3Score}"
+                 th:class="|podium-item ${stat.index == 0 ? 'first' : stat.index == 1 ? 'second' : 'third'}|">
+                <div class="podium-player" th:text="${score.player}">Name</div>
+                <div class="podium-score"
+                     th:text="${currentMode == 'easy' ? score.easyPoints : currentMode == 'hard' ? score.hardPoints : score.points}">
+                </div>
+            </div>
+        </div>
+        <table class="scores">
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+        </table>
+        <div class="hof-table-wrapper">
+            <table class="scores">
+                <tbody>
+                <tr th:each="score, it : ${HOFScore}">
+                    <td th:text="${it.index + 1}"></td>
+                    <td th:text="${score.player}"></td>
+                    <td th:text="${currentMode == 'easy' ? score.easyPoints : currentMode == 'hard' ? score.hardPoints : score.points}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <p>&copy; 2025 by Arsenii Burlaka.</p>
+</footer>
+
+</body>
+</html>

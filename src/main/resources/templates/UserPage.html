@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <title>Profile | 1024 Game</title>
+    <script src="/js/theme-switcher.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/game.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+    <h1>Your Profile</h1>
+    <hr>
+</header>
+
+<div class="dropdown" id="menuDropdown">
+    <button class="btn dropbtn" id="menuToggle">≡ Menu</button>
+    <span class="dropdown-content" id="dropdownContent">
+        <a href="/1024" class="btn">🡰 Game</a>
+        <a href="/1024/reviews" class="btn">Reviews</a>
+        <a href="/logout" class="btn">Logout</a>
+    </span>
+</div>
+
+<div id="theme-switcher" class="theme-switcher">
+    <button class="btn dropbtn"><i class="fas fa-cog"></i></button>
+    <div id="theme-menu" class="dropdown-content">
+        <a href="" data-theme="green" class="btn">Green</a>
+        <a href="" data-theme="pink" class="btn">Pink</a>
+        <a href="" data-theme="dark" class="btn">Dark</a>
+        <a href="" data-theme="light" class="btn">Light</a>
+    </div>
+</div>
+<div class="profile-card">
+    <p>Welcome, <strong th:text="${username}"></strong>!</p>
+    <p>Your registered from: <strong th:text="${registrationDate}"></strong></p>
+    <section>
+        <h2>Change Username</h2>
+        <form th:action="@{/profile/username}" method="post" class="username-form">
+            <input type="text" name="newUsername" placeholder="New username" required class="username-input"/>
+            <button type="submit" class="btn">Change</button>
+        </form>
+        <div th:if="${usernameError}" class="form-error" th:text="${usernameError}"></div>
+        <div th:if="${usernameSuccess}" class="form-success" th:text="${usernameSuccess}"></div>
+    </section>
+
+    <section style="margin-top:1.5rem;">
+        <h2>Change Password</h2>
+        <form th:action="@{/profile/password}" method="post" class="password-form">
+            <input type="password" name="oldPassword" placeholder="Old password" required class="password-input"/>
+            <input type="password" name="newPassword" placeholder="New password" required class="password-input"/>
+            <div th:if="${passwordError}" class="form-error" th:text="${passwordError}"></div>
+            <div th:if="${passwordSuccess}" class="form-success" th:text="${passwordSuccess}"></div>
+            <div class="form-submit">
+                <button type="submit" class="btn">Change</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<footer class="site-footer">
+    <p>&copy; 2025 by Arsenii Burlaka.</p>
+</footer>
+</body>
+</html>

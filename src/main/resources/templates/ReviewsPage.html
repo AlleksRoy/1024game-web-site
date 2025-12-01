@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <title>Reviews | 1024</title>
+    <script src="/js/theme-switcher.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="reviews-page">
+<header class="site-header">
+    <h1>Reviews</h1>
+    <hr>
+</header>
+
+<div class="reviews-back-btn">
+    <a th:href="@{/}" class="btn">🡰</a>
+</div>
+<div id="theme-switcher" class="theme-switcher">
+    <button class="btn dropbtn"><i class="fas fa-cog"></i></button>
+    <div id="theme-menu" class="dropdown-content">
+        <a href="" data-theme="green" class="btn">Green</a>
+        <a href="" data-theme="pink" class="btn">Pink</a>
+        <a href="" data-theme="dark" class="btn">Dark</a>
+        <a href="" data-theme="light" class="btn">Light</a>
+    </div>
+</div>
+<section class="reviews-section">
+    <div class="comments-list">
+        <div th:each="comment, it : ${comment}" class="comment-card">
+            <h3>
+                <span th:text="${comment.player}">Player</span>
+                <span class="rating-stars">
+                    <i th:each="star : ${#numbers.sequence(1, @ratingService.getRating('1024', comment.player))}"
+                       class="fa-solid fa-star"></i>
+                </span>
+                <small th:text="${#dates.format(comment.commented_at, 'd.M.yyyy HH:mm')}">Date</small>
+            </h3>
+            <p th:utext="${#strings.replace(comment.comment, '\n', '<br/>')}">Text</p>
+        </div>
+        <div th:if="${#lists.isEmpty(comment)}" class="empty-state">
+            There are no comments yet. Leave the first one!
+        </div>
+    </div>
+
+    <div class="comment-rating-wrapper" th:if="${@authenticationController.isUserLogged()}">
+        <form action="/1024/reviews" method="post" class="comment-rating-form">
+            <h2>Rate this game</h2>
+            <strong><div th:text="'Average rating: ' + ${avgRating}"></div></strong>
+            <div class="star-rating" aria-label="Game Rating">
+                <input type="radio" id="star5" name="rating" value="5" required/>
+                <label for="star5" title="5 stars">&#9733;</label>
+                <input type="radio" id="star4" name="rating" value="4"/>
+                <label for="star4" title="4 stars">&#9733;</label>
+                <input type="radio" id="star3" name="rating" value="3"/>
+                <label for="star3" title="3 stars">&#9733;</label>
+                <input type="radio" id="star2" name="rating" value="2"/>
+                <label for="star2" title="2 stars">&#9733;</label>
+                <input type="radio" id="star1" name="rating" value="1"/>
+                <label for="star1" title="1 star">&#9733;</label>
+            </div>
+            <h2>Leave a comment</h2>
+            <div class="input-group">
+                <textarea name="comment" placeholder="Your comment" rows="4" required></textarea>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn">➤</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <p>&copy; 2025 by Arsenii Burlaka.</p>
+</footer>
+</body>
+</html>

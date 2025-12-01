@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <title>Gamestudio | 1024</title>
+    <script src="/js/theme-switcher.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+    <h1>1024 Game</h1>
+    <hr>
+</header>
+
+<div id="theme-switcher" class="theme-switcher">
+    <button class="btn dropbtn"><i class="fas fa-cog"></i></button>
+    <div id="theme-menu" class="dropdown-content">
+        <a href="" data-theme="green" class="btn">Green</a>
+        <a href="" data-theme="pink" class="btn">Pink</a>
+        <a href="" data-theme="dark" class="btn">Dark</a>
+        <a href="" data-theme="light" class="btn">Light</a>
+    </div>
+</div>
+<span th:if="${@authenticationController.isUserLogged()}">
+    <div class="profile-btn">
+        <a th:href="@{/profile}" class="btn"><i class="fas fa-user"></i></a>
+    </div>
+</span>
+
+<main class="container">
+    <section th:if="${@authenticationController.isUserLogged()}" class="user-panel">
+        <p>Welcome, <strong th:text="${@authenticationController.getUserName()}"></strong>!</p>
+        <div class="buttons"><a th:href="@{/1024/easy}" class="btn">Easy Level</a></div>
+        <div class="buttons"><a th:href="@{/1024/normal}" class="btn">Normal Level</a></div>
+        <div class="buttons"><a th:href="@{/1024/hard}" class="btn">Hard Level</a></div>
+        </br>
+        <div class="buttons"><a th:href="@{/1024/reviews}" class="btn">Reviews</a></div>
+        <div class="buttons"><a href="/logout" class="btn">Logout</a></div>
+    </section>
+
+    <section th:if="${!@authenticationController.isUserLogged()}" class="guest-panel">
+        <p>You are not logged in.</p>
+        <p>Register or log in to save your progress</p>
+        <div class="buttons">
+            <a href="/login" class="btn">Login</a>
+            <a href="/register" class="btn">Register</a>
+        </div>
+        <p class="separator">— OR —</p>
+        <div class="buttons">
+            <a href="/1024/newEasy" class="btn btn-outline">Play as Guest</a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 by Arsenii Burlaka.</p>
+</footer>
+
+</body>
+</html>

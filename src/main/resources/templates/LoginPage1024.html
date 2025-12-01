@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <title>Login | 1024 Game</title>
+    <script src="/js/theme-switcher.js"></script>
+    <script src="/js/game.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="back-btn">
+    <a href="/" class="btn">🡰</a>
+</div>
+<div id="theme-switcher" class="theme-switcher">
+    <button class="btn dropbtn"><i class="fas fa-cog"></i></button>
+    <div id="theme-menu" class="dropdown-content">
+        <a href="" data-theme="green" class="btn">Green</a>
+        <a href="" data-theme="pink" class="btn">Pink</a>
+        <a href="" data-theme="dark" class="btn">Dark</a>
+        <a href="" data-theme="light" class="btn">Light</a>
+    </div>
+</div>
+<header class="site-header">
+    <h1>1024 Game</h1>
+    <hr>
+</header>
+<main class="auth-container">
+    <form action="/login" method="post" class="auth-form">
+        <h2>Login</h2>
+
+        <div class="input-group">
+            <input type="text" name="login" placeholder="Login" required>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <div th:if="${passwordError}" class="form-error" th:text="${passwordError}"></div>
+        <div th:if="${loginError}" class="form-error" th:text="${loginError}"></div>
+        <div class="button-group">
+            <button type="submit" class="btn">Login</button>
+        </div>
+
+        <p class="switch">Don't have an account? <a href="/register">Register</a></p>
+        <p class="switch">
+            <a href="/reset-password" class="btn-link">Forgot password?</a>
+        </p>
+    </form>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 by Arsenii Burlaka.</p>
+</footer>
+
+</body>
+</html>

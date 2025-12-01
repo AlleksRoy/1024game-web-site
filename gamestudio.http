@@ -1,0 +1,49 @@
+###
+GET http://localhost:8080/api/score/1024
+Accept: application/json
+
+###
+GET http://localhost:8080/api/comment/1024
+Accept: application/json
+
+###
+GET http://localhost:8080/api/rating/1024/AlleksRoy
+Accept: application/json
+
+###
+GET http://localhost:8080/api/rating/average/1024
+Accept: application/json
+
+
+###
+POST http://localhost:8080/api/score
+Content-Type: application/json
+
+{
+  "game": "1024",
+  "player": "AlleksRoy",
+  "points": 1050,
+  "played_at": "2025-04-08T16:59"
+}
+
+###
+POST http://localhost:8080/api/comment
+Content-Type: application/json
+
+{
+  "game": "1024",
+  "player": "AlleksRoy",
+  "comment": "It is OK!",
+  "commented_at": "2025-04-08T16:59"
+}
+
+###
+POST http://localhost:8080/api/rating
+Content-Type: application/json
+
+{
+  "game": "1024",
+  "player": "AlleksRoy",
+  "rating": 5,
+  "rated_at": "2025-04-08T16:59"
+}
